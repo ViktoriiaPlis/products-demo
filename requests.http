@@ -1,0 +1,61 @@
+### Create product
+POST http://localhost:8080/product
+Content-Type: application/json
+
+{
+  "productName": "1",
+  "description": "string",
+  "price": 190,
+  "picture": "string",
+  "categoryId": "ffea6677-4519-45e3-a679-2d94106eaa5d",
+  "status": 1
+}
+
+### update product
+PUT http://localhost:8080/product/d44a6ab9-5e8e-479a-ba68-665fd44eda2a
+Content-Type: application/json
+
+{
+  "productName": "string",
+  "description": "string",
+  "price": 0,
+  "picture": "string",
+  "categoryId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "status": 0
+}
+
+### find product by criteria
+GET http://localhost:8080/product?category=lalalal&low-price=1
+
+### delete product
+DELETE http://localhost:8080/product/9c52d100-6f5f-4df0-a357-503bdc7768dd
+
+### create category
+POST http://localhost:8080/category
+Content-Type: application/json
+
+{
+  "category": "jhfehuiehe",
+  "description": "string"
+}
+
+
+### delete category
+DELETE http://localhost:8080/category/681d4737-7bc0-4f50-8791-e221f0179ef8
+
+
+
+### update category
+PUT http://localhost:8080/category/1a5f52d7-646b-4155-900b-d1f6ded100fc
+Content-Type: application/json
+
+{
+  "category": "lalalal",
+  "description": "twtetew"
+}
+
+### find category by name
+GET http://localhost:8080/category?category=categ1
+
+### Find
+GET http://localhost:8080/category
