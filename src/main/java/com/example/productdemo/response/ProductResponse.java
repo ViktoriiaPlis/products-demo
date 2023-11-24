@@ -14,10 +14,13 @@ import java.util.UUID;
 public class ProductResponse {
     @Schema(description = "id продукта")
     private UUID id;
+
     @Schema(description = "Наименование продукта")
     private String name;
+
     @Schema(description = "Описание")
     private String description;
+
     @Schema(description = "Цена")
     private long price;
 

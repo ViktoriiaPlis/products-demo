@@ -59,3 +59,13 @@ GET http://localhost:8080/category?category=categ1
 
 ### Find
 GET http://localhost:8080/category
+
+### create user
+POST http://localhost:8080/user
+Content-Type: application/json
+
+{
+  "login": "vkuznetsova",
+  "role": 0,
+  "hash": "Dbrnjhbz1"
+}
