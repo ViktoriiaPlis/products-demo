@@ -33,6 +33,7 @@ DELETE http://localhost:8080/product/9c52d100-6f5f-4df0-a357-503bdc7768dd
 ### create category
 POST http://localhost:8080/category
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {
   "category": "jhfehuiehe",
@@ -44,7 +45,6 @@ Content-Type: application/json
 DELETE http://localhost:8080/category/681d4737-7bc0-4f50-8791-e221f0179ef8
 
 
-
 ### update category
 PUT http://localhost:8080/category/1a5f52d7-646b-4155-900b-d1f6ded100fc
 Content-Type: application/json
@@ -54,8 +54,6 @@ Content-Type: application/json
   "description": "twtetew"
 }
 
-### find category by name
-GET http://localhost:8080/category?category=categ1
 
 ### Find
 GET http://localhost:8080/category
@@ -63,9 +61,42 @@ GET http://localhost:8080/category
 ### create user
 POST http://localhost:8080/user
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {
-  "login": "vkuznetsova",
-  "role": 0,
-  "hash": "Dbrnjhbz1"
+  "login": "user",
+  "role": "USER",
+  "password": "user"
 }
+
+
+###
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "login": "admin",
+  "password": "admin"
+}
+
+> {%
+    client.global.set("auth_token", response.body.accessToken);
+%}
+
+###
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "login": "user",
+  "password": "user"
+}
+
+> {%
+    client.global.set("auth_token", response.body.accessToken);
+%}
+
+
+### find category by name
+GET http://localhost:8080/category?category=categ1
+Authorization: Bearer {{auth_token}}
