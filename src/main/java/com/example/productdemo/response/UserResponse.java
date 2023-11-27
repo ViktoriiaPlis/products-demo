@@ -1,11 +1,13 @@
 package com.example.productdemo.response;
 
+import com.example.productdemo.model.UserRole;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,5 +19,5 @@ public class UserResponse {
     private String login;
 
     @Schema(description = "Роль")
-    private String role;
+    private UserRole role;
 }

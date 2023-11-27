@@ -1,5 +1,6 @@
 package com.example.productdemo.request;
 
+import com.example.productdemo.model.UserRole;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -17,7 +18,7 @@ public class UserRequest {
 
     @Schema(description = "Роль")
     @NotBlank
-    private Short role;
+    private UserRole userRole;
 
     @Schema(description = "Пароль")
     @NotBlank

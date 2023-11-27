@@ -1,5 +1,6 @@
 package com.example.productdemo.entity;
 
+import com.example.productdemo.model.UserRole;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -14,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "users")
-public class UserEntity extends AbstractEntity{
+public class UserEntity extends AbstractEntity {
     @Column(name = "login")
     private String login;
 
@@ -22,7 +23,7 @@ public class UserEntity extends AbstractEntity{
     private String hash;
 
     @Column(name = "role")
-    private Short role;
+    private UserRole role;
 
     @Column(name = "salt")
     private String salt;

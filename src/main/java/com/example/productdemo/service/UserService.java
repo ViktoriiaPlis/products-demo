@@ -16,7 +16,7 @@ import java.util.UUID;
 public class UserService {
     private final UserDao userDao;
     private final ObjectMapper objectMapper;
-    
+
     private final SecurityService securityService;
 
     public UserService(UserDao userDao, ObjectMapper objectMapper, SecurityService securityService) {
@@ -35,7 +35,7 @@ public class UserService {
         UserEntity user = new UserEntity(
                 userRequest.getLogin(),
                 securityService.generatePasswordHash(userRequest.getPassword(), salt),
-                userRequest.getRole(),
+                userRequest.getUserRole(),
                 salt
         );
         UserEntity savedUser = userDao.save(user);
@@ -61,7 +61,7 @@ public class UserService {
         if (user.isPresent()) {
             String salt = securityService.generateSalt();
             user.get().setLogin(userRequest.getLogin());
-            user.get().setRole(userRequest.getRole());
+            user.get().setRole(userRequest.getUserRole());
             user.get().setHash(securityService.generatePasswordHash(userRequest.getPassword(), salt));
             user.get().setSalt(salt);
             userDao.save(user.get());

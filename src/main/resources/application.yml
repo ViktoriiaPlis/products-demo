@@ -77,5 +77,8 @@ logging:
 
 app:
   algorithmPassword: SHA-256
-
+  accessToken:
+    ttl: 15m
+  refreshToken:
+    ttl: 24h
 
