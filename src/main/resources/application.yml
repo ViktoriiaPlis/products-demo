@@ -67,10 +67,6 @@ feign:
       default:
         connectTimeout: 10000
         readTimeout: 10000
-#      auth-service:
-#        url: ${AUTH_SERVICE_URL:}
-#      vehicle-service:
-#        url: ${VEHICLE_SERVICE_URL:}
 
 #logging:
 #  config: classpath:logback.xml
@@ -78,3 +74,11 @@ feign:
 logging:
   level:
     org.springframework: debug
+
+app:
+  algorithmPassword: SHA-256
+  accessToken:
+    ttl: 15m
+  refreshToken:
+    ttl: 24h
+

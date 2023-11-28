@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,6 +38,7 @@ public class CategoryController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Создание категории")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Операция успешно выполнена")})
     public CategoryResponse createCategory(@RequestBody @Valid CategoryRequest categoryRequest) {
@@ -44,6 +46,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Удаление категории")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Операция успешно выполнена")})
     @ResponseStatus(HttpStatus.OK)
@@ -53,6 +56,7 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Операция успешно выполнена")})
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Обновление категории")

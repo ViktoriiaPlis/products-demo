@@ -1,9 +1,51 @@
-### Create product
-POST http://localhost:8080/product
+### auth
+POST http://localhost:8080/auth/login
 Content-Type: application/json
 
 {
-  "productName": "1",
+  "login": "admin",
+  "password": "admin"
+}
+
+> {%
+    client.global.set("auth_token", response.body.accessToken);
+%}
+
+
+### create user
+POST http://localhost:8080/user
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "login": "user",
+  "userRole": "USER",
+  "password": "user"
+}
+
+### delete user
+DELETE http://localhost:8080/user/e2f3c4ec-b543-414b-a0e8-c33e6c824feb
+Authorization: Bearer {{auth_token}}
+
+### update user
+PUT http://localhost:8080/user/e2f3c4ec-b543-414b-a0e8-c33e6c824feb
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "login": "newUser",
+  "userRole": "ADMIN",
+  "password": "string"
+}
+
+
+### Create product
+POST http://localhost:8080/product
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "productName": "10",
   "description": "string",
   "price": 190,
   "picture": "string",
@@ -14,6 +56,7 @@ Content-Type: application/json
 ### update product
 PUT http://localhost:8080/product/d44a6ab9-5e8e-479a-ba68-665fd44eda2a
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {
   "productName": "string",
@@ -24,15 +67,20 @@ Content-Type: application/json
   "status": 0
 }
 
-### find product by criteria
-GET http://localhost:8080/product?category=lalalal&low-price=1
 
 ### delete product
 DELETE http://localhost:8080/product/9c52d100-6f5f-4df0-a357-503bdc7768dd
+Authorization: Bearer {{auth_token}}
+
+### find product by criteria
+GET http://localhost:8080/product?category=lalalal&low-price=1
+
+
 
 ### create category
 POST http://localhost:8080/category
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {
   "category": "jhfehuiehe",
@@ -42,20 +90,26 @@ Content-Type: application/json
 
 ### delete category
 DELETE http://localhost:8080/category/681d4737-7bc0-4f50-8791-e221f0179ef8
-
+Authorization: Bearer {{auth_token}}
 
 
 ### update category
 PUT http://localhost:8080/category/1a5f52d7-646b-4155-900b-d1f6ded100fc
 Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 {
   "category": "lalalal",
   "description": "twtetew"
 }
 
-### find category by name
-GET http://localhost:8080/category?category=categ1
 
-### Find
-GET http://localhost:8080/category
+
+### find category by name
+GET http://localhost:8080/category?category=jhfehuiehe
+Authorization: Bearer {{auth_token}}
+
+
+
+
+
