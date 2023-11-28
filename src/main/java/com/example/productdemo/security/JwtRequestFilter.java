@@ -41,7 +41,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
         }
         if (jwtToken != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            User user = new User(jwtToken.getFirst(), "null", List.of(new SimpleGrantedAuthority("ROLE_" + jwtToken.getSecond().getVale())));
+            User user = new User(jwtToken.getFirst(), "null", List.of(new SimpleGrantedAuthority("ROLE_" + jwtToken.getSecond().getValue())));
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()));
         }
         filterChain.doFilter(request, response);

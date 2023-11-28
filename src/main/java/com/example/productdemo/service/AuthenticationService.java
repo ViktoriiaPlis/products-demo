@@ -42,8 +42,8 @@ public class AuthenticationService {
                 throw new IllegalStateException("User not found or password incorrect");
             }
             //TODO rewrite role
-            return new AuthResponse(generateAccessToken(authRequest.getLogin(), UserRole.USER),
-                    generateRefreshToken(authRequest.getLogin(), UserRole.USER));
+            return new AuthResponse(generateAccessToken(authRequest.getLogin(), userEntity.get().getRole()),
+                    generateRefreshToken(authRequest.getLogin(), userEntity.get().getRole()));
         }
         throw new IllegalStateException("User not found or password incorrect");
     }

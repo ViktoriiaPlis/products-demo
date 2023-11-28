@@ -7,11 +7,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Schema(description = "Модель создание пользователя")
-public class UserRequest {
+public class UserRequest implements Serializable {
     @Schema(description = "Логин")
     @NotBlank
     private String login;

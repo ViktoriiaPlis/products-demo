@@ -1,7 +1,0 @@
-ALTER TABLE users
-    ADD COLUMN salt VARCHAR(100),
-    ADD COLUMN hash VARCHAR(100);
-
-ALTER TABLE users
-DROP COLUMN password;
-

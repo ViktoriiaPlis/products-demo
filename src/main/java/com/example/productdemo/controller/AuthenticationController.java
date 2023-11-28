@@ -31,18 +31,4 @@ public class AuthenticationController {
     public AuthResponse login(@RequestBody @Valid AuthRequest authRequest) {
         return authService.login(authRequest);
     }
-
-//    @PostMapping("/token")
-//    @Operation(summary = "токен")
-//    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Операция успешно выполнена")})
-//    public ResponseEntity<JwtResponse> getNewAccessToken(@RequestBody RefreshJwtRequest request) {
-//        // final JwtResponse token = authService.getAccessToken(request.getRefreshToken());
-//        return ResponseEntity.ok(new JwtResponse("", ""));
-//    }
-//
-//    @PostMapping("/refresh")
-//    public ResponseEntity<JwtResponse> getNewRefreshToken(@RequestBody RefreshJwtRequest request) {
-//        // final JwtResponse token = authService.refresh(request.getRefreshToken());
-//        return ResponseEntity.ok(new JwtResponse("", ""));
-//    }
 }

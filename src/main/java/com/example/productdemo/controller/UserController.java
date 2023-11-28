@@ -1,10 +1,7 @@
 package com.example.productdemo.controller;
 
-import com.example.productdemo.request.ProductRequest;
 import com.example.productdemo.request.UserRequest;
-import com.example.productdemo.response.ProductResponse;
 import com.example.productdemo.response.UserResponse;
-import com.example.productdemo.service.ProductService;
 import com.example.productdemo.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -12,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
 @RestController
@@ -35,7 +32,9 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
+
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Создание пользователя")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Операция успешно выполнена")})
     public UserResponse createUser(@RequestBody @Valid UserRequest userRequest) {
@@ -43,6 +42,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Удаление пользователя")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Операция успешно выполнена")})
     @ResponseStatus(HttpStatus.OK)
@@ -51,6 +51,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Обновление пользователя")
     public UserResponse updateUser(@PathVariable UUID id, @RequestBody UserRequest userRequest) {

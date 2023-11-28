@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,6 +40,7 @@ public class ProductController {
 
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Создание продукта")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Операция успешно выполнена")})
     public ProductResponse createProduct(@RequestBody @Valid ProductRequest productRequest) {
@@ -46,6 +48,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Удаление продукта")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Операция успешно выполнена")})
     @ResponseStatus(HttpStatus.OK)
@@ -54,6 +57,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Обновление продукта")
     public ProductResponse updateProduct(@PathVariable UUID id, @RequestBody ProductRequest productRequest) {
