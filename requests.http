@@ -12,6 +12,21 @@ Content-Type: application/json
 %}
 
 
+### Create product
+POST http://localhost:8080/product
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "productName": "prod49",
+  "description": "string",
+  "price": 190,
+  "picture": "string",
+  "categoryId": "ffea6677-4519-45e3-a679-2d94106eaa5d",
+  "status": 1
+}
+
+
 ### create user
 POST http://localhost:8080/user
 Content-Type: application/json
@@ -39,19 +54,7 @@ Authorization: Bearer {{auth_token}}
 }
 
 
-### Create product
-POST http://localhost:8080/product
-Content-Type: application/json
-Authorization: Bearer {{auth_token}}
 
-{
-  "productName": "10",
-  "description": "string",
-  "price": 190,
-  "picture": "string",
-  "categoryId": "ffea6677-4519-45e3-a679-2d94106eaa5d",
-  "status": 1
-}
 
 ### update product
 PUT http://localhost:8080/product/d44a6ab9-5e8e-479a-ba68-665fd44eda2a

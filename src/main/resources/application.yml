@@ -38,6 +38,21 @@ spring:
   flyway:
     out-of-order: true
 
+  kafka:
+    bootstrap-servers: localhost:29092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: ${spring.application.name}
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: '*'
+
 
 server:
   error:
@@ -67,6 +82,10 @@ feign:
       default:
         connectTimeout: 10000
         readTimeout: 10000
+#      auth-service:
+#        url: ${AUTH_SERVICE_URL:}
+#      vehicle-service:
+#        url: ${VEHICLE_SERVICE_URL:}
 
 #logging:
 #  config: classpath:logback.xml
@@ -75,10 +94,17 @@ logging:
   level:
     org.springframework: debug
 
+
 app:
   algorithmPassword: SHA-256
   accessToken:
     ttl: 15m
   refreshToken:
     ttl: 24h
+  kafka:
+    topic:
+      products-changed: products.changed
+
+
+
 

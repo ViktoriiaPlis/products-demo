@@ -5,10 +5,13 @@ import com.example.productdemo.dao.ProductDao;
 import com.example.productdemo.dao.ProductValueSpecification;
 import com.example.productdemo.entity.CategoryEntity;
 import com.example.productdemo.entity.ProductEntity;
+import com.example.productdemo.model.ProductChangedEvent;
 import com.example.productdemo.request.ProductRequest;
 import com.example.productdemo.response.ProductResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -23,11 +26,17 @@ public class ProductService {
     private final CategoryDao categoryDao;
 
     private final ObjectMapper objectMapper;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final String topicProductChanged;
 
-    public ProductService(ProductDao productDao, CategoryDao categoryDao, ObjectMapper objectMapper) {
+    public ProductService(ProductDao productDao, CategoryDao categoryDao, ObjectMapper objectMapper,
+                          KafkaTemplate<String, Object> kafkaTemplate,
+                          @Value("${app.kafka.topic.products-changed}") String topicProductChanged) {
         this.productDao = productDao;
         this.categoryDao = categoryDao;
         this.objectMapper = objectMapper;
+        this.kafkaTemplate = kafkaTemplate;
+        this.topicProductChanged = topicProductChanged;
     }
 
     @Transactional
@@ -41,6 +50,8 @@ public class ProductService {
                 productRequest.getStatus());
         ProductEntity savedProduct = productDao.save(product);
         ProductResponse response = objectMapper.convertValue(savedProduct, ProductResponse.class);
+        kafkaTemplate.send(topicProductChanged, new ProductChangedEvent(savedProduct.getName(), savedProduct.getDescription(),
+                savedProduct.getPrice(), savedProduct.getPicture(), savedProduct.getCategoryId(), savedProduct.getStatus()));
         return response;
     }
 
