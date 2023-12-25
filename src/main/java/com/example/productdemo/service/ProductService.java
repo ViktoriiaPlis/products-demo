@@ -29,14 +29,22 @@ public class ProductService {
     private final KafkaTemplate<String, Object> kafkaTemplate;
     private final String topicProductChanged;
 
+    private final String topicPriceIncrease;
+
+    private final String topicPriceDecrease;
+
     public ProductService(ProductDao productDao, CategoryDao categoryDao, ObjectMapper objectMapper,
                           KafkaTemplate<String, Object> kafkaTemplate,
-                          @Value("${app.kafka.topic.products-changed}") String topicProductChanged) {
+                          @Value("${app.kafka.topic.products-changed}") String topicProductChanged,
+                          @Value("price.increase") String topicPriceIncrease,
+                          @Value("price.decrease") String topicPriceDecrease) {
         this.productDao = productDao;
         this.categoryDao = categoryDao;
         this.objectMapper = objectMapper;
         this.kafkaTemplate = kafkaTemplate;
         this.topicProductChanged = topicProductChanged;
+        this.topicPriceIncrease = topicPriceIncrease;
+        this.topicPriceDecrease = topicPriceDecrease;
     }
 
     @Transactional
@@ -100,6 +108,12 @@ public class ProductService {
         Optional<ProductEntity> product = productDao.findById(id);
         ProductResponse response = new ProductResponse();
         if (product.isPresent()) {
+//            if (product.get().getPrice() < productRequest.getPrice()) {
+//                kafkaTemplate.send(topicPriceIncrease, new PriceChangedEvent(id, productRequest.getProductName(), productRequest.getPrice()));
+//            }
+//            if (product.get().getPrice() > productRequest.getPrice()) {
+//                kafkaTemplate.send(topicPriceDecrease, new PriceChangedEvent(id, productRequest.getProductName(), productRequest.getPrice()));
+//            }
             product.get().setName(productRequest.getProductName());
             product.get().setDescription(productRequest.getDescription());
             product.get().setPrice(productRequest.getPrice());

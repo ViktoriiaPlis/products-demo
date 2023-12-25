@@ -12,4 +12,19 @@ public class KafkaConfig {
     public NewTopic topicProductChanged(@Value("${app.kafka.topic.products-changed}") String topic) {
         return TopicBuilder.name(topic).partitions(1).build();
     }
+
+    @Bean
+    public NewTopic topicPriceIncrease(@Value("${app.kafka.topic.price-increase}") String topic) {
+        return TopicBuilder.name(topic).partitions(1).build();
+    }
+
+    @Bean
+    public NewTopic topicPriceDecrease(@Value("${app.kafka.topic.price-decrease}") String topic) {
+        return TopicBuilder.name(topic).partitions(1).build();
+    }
+
+    @Bean
+    public NewTopic topicUserLogin(@Value("${app.kafka.topic.user-login}") String topic) {
+        return TopicBuilder.name(topic).partitions(1).build();
+    }
 }

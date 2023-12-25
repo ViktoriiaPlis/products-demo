@@ -18,7 +18,7 @@ Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
 {
-  "productName": "prod49",
+  "productName": "new",
   "description": "string",
   "price": 190,
   "picture": "string",
@@ -57,14 +57,14 @@ Authorization: Bearer {{auth_token}}
 
 
 ### update product
-PUT http://localhost:8080/product/d44a6ab9-5e8e-479a-ba68-665fd44eda2a
+PUT http://localhost:8080/product/c0d54136-efdb-4ab9-bd02-402531edf5e5
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
 {
-  "productName": "string",
+  "productName": "newPr",
   "description": "string",
-  "price": 0,
+  "price": 100,
   "picture": "string",
   "categoryId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
   "status": 0

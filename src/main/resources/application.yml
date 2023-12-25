@@ -104,6 +104,10 @@ app:
   kafka:
     topic:
       products-changed: products.changed
+      price-increase: price.increase
+      price-decrease: price.decrease
+      user-login: user.login
+      products-promo: products.promo
 
 
 
