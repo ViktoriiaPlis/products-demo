@@ -5,6 +5,8 @@ import com.example.productdemo.dao.ProductDao;
 import com.example.productdemo.dao.ProductValueSpecification;
 import com.example.productdemo.entity.CategoryEntity;
 import com.example.productdemo.entity.ProductEntity;
+import com.example.productdemo.model.PriceDecreaseEvent;
+import com.example.productdemo.model.PriceIncreaseEvent;
 import com.example.productdemo.model.ProductChangedEvent;
 import com.example.productdemo.request.ProductRequest;
 import com.example.productdemo.response.ProductResponse;
@@ -108,18 +110,36 @@ public class ProductService {
         Optional<ProductEntity> product = productDao.findById(id);
         ProductResponse response = new ProductResponse();
         if (product.isPresent()) {
-//            if (product.get().getPrice() < productRequest.getPrice()) {
-//                kafkaTemplate.send(topicPriceIncrease, new PriceChangedEvent(id, productRequest.getProductName(), productRequest.getPrice()));
-//            }
-//            if (product.get().getPrice() > productRequest.getPrice()) {
-//                kafkaTemplate.send(topicPriceDecrease, new PriceChangedEvent(id, productRequest.getProductName(), productRequest.getPrice()));
-//            }
-            product.get().setName(productRequest.getProductName());
-            product.get().setDescription(productRequest.getDescription());
+            String productName = product.get().getName();
+            String description = product.get().getDescription();
+            String picture = product.get().getPicture();
+            Short status = product.get().getStatus();
+            if (product.get().getPrice() < productRequest.getPrice()) {
+                kafkaTemplate.send(topicPriceIncrease,
+                        new PriceIncreaseEvent(id, productName, productRequest.getPrice(), product.get().getPrice()));
+            }
+            if (product.get().getPrice() > productRequest.getPrice()) {
+                kafkaTemplate.send(topicPriceDecrease, new PriceDecreaseEvent(id, productName,
+                        product.get().getPrice(), productRequest.getPrice()));
+            }
+            if (productRequest.getProductName() != null) {
+                productName = productRequest.getProductName();
+            }
+            if (productRequest.getDescription() != null) {
+                description = productRequest.getDescription();
+            }
+            if (productRequest.getPicture() != null) {
+                picture = productRequest.getPicture();
+            }
+            if (productRequest.getStatus() != null) {
+                status = productRequest.getStatus();
+            }
+            product.get().setName(productName);
             product.get().setPrice(productRequest.getPrice());
-            product.get().setPicture(productRequest.getPicture());
+            product.get().setPicture(picture);
             product.get().setCategoryId(productRequest.getCategoryId());
-            product.get().setStatus(productRequest.getStatus());
+            product.get().setStatus(status);
+            product.get().setDescription(description);
             product.get().setUpdatedAt(Instant.now());
             productDao.save(product.get());
             response = objectMapper.convertValue(product, ProductResponse.class);

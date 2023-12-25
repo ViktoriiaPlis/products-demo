@@ -9,10 +9,9 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PriceChangedEvent {
-
+public class PriceDecreaseEvent {
     private UUID id;
-    private long price;
-    private UUID categoryId;
-
+    private String name;
+    private long oldPrice;
+    private long newPrice;
 }

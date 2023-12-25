@@ -64,7 +64,7 @@ Authorization: Bearer {{auth_token}}
 {
   "productName": "newPr",
   "description": "string",
-  "price": 100,
+  "price": 1,
   "picture": "string",
   "categoryId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
   "status": 0
