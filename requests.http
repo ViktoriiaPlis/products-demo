@@ -18,7 +18,7 @@ Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
 {
-  "productName": "new",
+  "productName": "createdNew1",
   "description": "string",
   "price": 190,
   "picture": "string",
@@ -64,7 +64,7 @@ Authorization: Bearer {{auth_token}}
 {
   "productName": "newPr",
   "description": "string",
-  "price": 1,
+  "price": 100,
   "picture": "string",
   "categoryId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
   "status": 0

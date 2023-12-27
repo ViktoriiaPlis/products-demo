@@ -9,7 +9,8 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductChangedEvent {
+public class ProductCreatedEvent {
+
     private String productName;
 
     private String description;

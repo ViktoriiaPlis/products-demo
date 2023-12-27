@@ -9,22 +9,22 @@ import org.springframework.kafka.config.TopicBuilder;
 @Configuration
 public class KafkaConfig {
     @Bean
-    public NewTopic topicProductChanged(@Value("${app.kafka.topic.products-changed}") String topic) {
+    public NewTopic topicProductCreated(@Value("${app.kafka.topic.products-created}") String topic) {
         return TopicBuilder.name(topic).partitions(1).build();
     }
 
     @Bean
-    public NewTopic topicPriceIncrease(@Value("${app.kafka.topic.price-increase}") String topic) {
+    public NewTopic topicPriceIncreased(@Value("${app.kafka.topic.price-increased}") String topic) {
         return TopicBuilder.name(topic).partitions(1).build();
     }
 
     @Bean
-    public NewTopic topicPriceDecrease(@Value("${app.kafka.topic.price-decrease}") String topic) {
+    public NewTopic topicPriceDecreased(@Value("${app.kafka.topic.price-decreased}") String topic) {
         return TopicBuilder.name(topic).partitions(1).build();
     }
 
     @Bean
-    public NewTopic topicUserLogin(@Value("${app.kafka.topic.user-login}") String topic) {
+    public NewTopic topicUserLogined(@Value("${app.kafka.topic.user-logined}") String topic) {
         return TopicBuilder.name(topic).partitions(1).build();
     }
 }

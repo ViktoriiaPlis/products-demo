@@ -30,7 +30,7 @@ public class AuthenticationService {
                                  JwtTokenUtil jwtTokenUtil, @Value("${app.accessToken.ttl:15m}") Duration accessTokenTtl,
                                  @Value("${app.refreshToken.ttl:24h}") Duration refreshTokenTtl,
                                  KafkaTemplate<String, Object> kafkaTemplate,
-                                 @Value("user.login") String topicUserLogin) {
+                                 @Value("user.logined") String topicUserLogin) {
         this.userDao = userDao;
         this.securityService = securityService;
         this.jwtTokenUtil = jwtTokenUtil;
@@ -43,14 +43,14 @@ public class AuthenticationService {
     public AuthResponse login(AuthRequest authRequest) {
         Optional<UserEntity> userEntity = userDao.findByLoginAndDeletedAtIsNull(authRequest.getLogin());
         if (userEntity.isPresent()) {
-            kafkaTemplate.send(topicUserLogin, new UserLoginEvent(authRequest.getLogin(), Instant.now()));
             String salt = userEntity.get().getSalt();
             String expectedHash = userEntity.get().getHash();
             String actualHash = securityService.generatePasswordHash(authRequest.getPassword(), salt);
             if (!expectedHash.equals(actualHash)) {
                 throw new IllegalStateException("User not found or password incorrect");
             }
-            //TODO rewrite role
+
+            kafkaTemplate.send(topicUserLogin, new UserLoginEvent(authRequest.getLogin(), Instant.now()));
             return new AuthResponse(generateAccessToken(authRequest.getLogin(), userEntity.get().getRole()),
                     generateRefreshToken(authRequest.getLogin(), userEntity.get().getRole()));
         }

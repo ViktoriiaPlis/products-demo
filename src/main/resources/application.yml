@@ -103,10 +103,10 @@ app:
     ttl: 24h
   kafka:
     topic:
-      products-changed: products.changed
-      price-increase: price.increase
-      price-decrease: price.decrease
-      user-login: user.login
+      products-created: products.created
+      price-increased: price.increased
+      price-decreased: price.decreased
+      user-logined: user.logined
       products-promo: products.promo
 
 

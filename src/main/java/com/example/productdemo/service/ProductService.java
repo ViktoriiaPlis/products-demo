@@ -6,8 +6,8 @@ import com.example.productdemo.dao.ProductValueSpecification;
 import com.example.productdemo.entity.CategoryEntity;
 import com.example.productdemo.entity.ProductEntity;
 import com.example.productdemo.model.PriceDecreaseEvent;
-import com.example.productdemo.model.PriceIncreaseEvent;
-import com.example.productdemo.model.ProductChangedEvent;
+import com.example.productdemo.model.PriceIncreasedEvent;
+import com.example.productdemo.model.ProductCreatedEvent;
 import com.example.productdemo.request.ProductRequest;
 import com.example.productdemo.response.ProductResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,24 +29,24 @@ public class ProductService {
 
     private final ObjectMapper objectMapper;
     private final KafkaTemplate<String, Object> kafkaTemplate;
-    private final String topicProductChanged;
+    private final String topicProductCreated;
 
-    private final String topicPriceIncrease;
+    private final String topicPriceIncreased;
 
-    private final String topicPriceDecrease;
+    private final String topicPriceDecreased;
 
     public ProductService(ProductDao productDao, CategoryDao categoryDao, ObjectMapper objectMapper,
                           KafkaTemplate<String, Object> kafkaTemplate,
-                          @Value("${app.kafka.topic.products-changed}") String topicProductChanged,
-                          @Value("price.increase") String topicPriceIncrease,
-                          @Value("price.decrease") String topicPriceDecrease) {
+                          @Value("${app.kafka.topic.products-created}") String topicProductCreated,
+                          @Value("price.increased") String topicPriceIncreased,
+                          @Value("price.decreased") String topicPriceDecreased) {
         this.productDao = productDao;
         this.categoryDao = categoryDao;
         this.objectMapper = objectMapper;
         this.kafkaTemplate = kafkaTemplate;
-        this.topicProductChanged = topicProductChanged;
-        this.topicPriceIncrease = topicPriceIncrease;
-        this.topicPriceDecrease = topicPriceDecrease;
+        this.topicProductCreated = topicProductCreated;
+        this.topicPriceIncreased = topicPriceIncreased;
+        this.topicPriceDecreased = topicPriceDecreased;
     }
 
     @Transactional
@@ -60,7 +60,7 @@ public class ProductService {
                 productRequest.getStatus());
         ProductEntity savedProduct = productDao.save(product);
         ProductResponse response = objectMapper.convertValue(savedProduct, ProductResponse.class);
-        kafkaTemplate.send(topicProductChanged, new ProductChangedEvent(savedProduct.getName(), savedProduct.getDescription(),
+        kafkaTemplate.send(topicProductCreated, new ProductCreatedEvent(savedProduct.getName(), savedProduct.getDescription(),
                 savedProduct.getPrice(), savedProduct.getPicture(), savedProduct.getCategoryId(), savedProduct.getStatus()));
         return response;
     }
@@ -114,26 +114,7 @@ public class ProductService {
             String description = product.get().getDescription();
             String picture = product.get().getPicture();
             Short status = product.get().getStatus();
-            if (product.get().getPrice() < productRequest.getPrice()) {
-                kafkaTemplate.send(topicPriceIncrease,
-                        new PriceIncreaseEvent(id, productName, productRequest.getPrice(), product.get().getPrice()));
-            }
-            if (product.get().getPrice() > productRequest.getPrice()) {
-                kafkaTemplate.send(topicPriceDecrease, new PriceDecreaseEvent(id, productName,
-                        product.get().getPrice(), productRequest.getPrice()));
-            }
-            if (productRequest.getProductName() != null) {
-                productName = productRequest.getProductName();
-            }
-            if (productRequest.getDescription() != null) {
-                description = productRequest.getDescription();
-            }
-            if (productRequest.getPicture() != null) {
-                picture = productRequest.getPicture();
-            }
-            if (productRequest.getStatus() != null) {
-                status = productRequest.getStatus();
-            }
+            long oldPrice = product.get().getPrice();
             product.get().setName(productName);
             product.get().setPrice(productRequest.getPrice());
             product.get().setPicture(picture);
@@ -142,11 +123,32 @@ public class ProductService {
             product.get().setDescription(description);
             product.get().setUpdatedAt(Instant.now());
             productDao.save(product.get());
+            if (oldPrice < productRequest.getPrice()) {
+                kafkaTemplate.send(topicPriceIncreased,
+                        new PriceIncreasedEvent(id, product.get().getName(), oldPrice, productRequest.getPrice()));
+            }
+            if (oldPrice > productRequest.getPrice()) {
+                kafkaTemplate.send(topicPriceDecreased, new PriceDecreaseEvent(id, product.get().getName(),
+                        oldPrice, productRequest.getPrice()));
+            }
             response = objectMapper.convertValue(product, ProductResponse.class);
+
 
         } else {
             throw new IllegalStateException("Product not found : id" + id);
         }
         return response;
+    }
+
+    @Transactional
+    public void updateProductPriceById(UUID id, long price) {
+        Optional<ProductEntity> product = productDao.findById(id);
+        if (product.isPresent()) {
+            product.get().setPrice(price);
+            productDao.save(product.get());
+
+        } else {
+            throw new IllegalStateException("Product not found : id" + id);
+        }
     }
 }
